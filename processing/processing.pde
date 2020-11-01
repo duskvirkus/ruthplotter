@@ -14,6 +14,18 @@ void setup() {
   
   cp5.addButton("home")
    .setValue(0)
+   .setPosition(100,50)
+   .setSize(200,19)
+   ;
+   
+  cp5.addButton("penUp")
+   .setValue(0)
+   .setPosition(100, 80)
+   .setSize(200,19)
+   ;
+   
+  cp5.addButton("penDown")
+   .setValue(0)
    .setPosition(100,100)
    .setSize(200,19)
    ;
@@ -30,6 +42,14 @@ void draw() {
 
 void home(int value) {
   port.write(toBytes("G28"));
+}
+
+void penUp(int value) {
+  port.write(toBytes("M05"));
+}
+
+void penDown(int value) {
+  port.write(toBytes("M03"));
 }
 
 byte[] toBytes(String s) {
