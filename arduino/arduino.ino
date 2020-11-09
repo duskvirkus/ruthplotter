@@ -17,8 +17,7 @@
 //#define ABSOLUTE_MODE 0
 //#define RELATIVE_MODE 1
 
-#define STREAMING 0
-#define DEBUG 1
+#define STANDARD_MODE 0
 
 Adafruit_MotorShield ms = Adafruit_MotorShield();
 
@@ -27,12 +26,12 @@ Adafruit_StepperMotor *step2 = ms.getStepper(200, 2);
 
 Servo penServo;
 
-int coordMode;
+//int coordMode;
 float positionX;
 float positionY;
 
-bool initalized;
-int mode;
+//bool initalized;
+
 
 void writeFloat(float a) {
   byte bytes[4];
@@ -102,9 +101,11 @@ void executeLine(char* line) {
   char tempUInt16[UINT16_SIZE];
   char tempFloat32[FLOAT32_SIZE];
 
+//  Serial.println(command);
+
   if (strcmp(command, "star") == 0) {
     
-    int major, minor, patch;
+    int major, minor, patch, mode;
     
     strncpy(tempUInt16, line + COMMAND_SIZE, UINT16_SIZE);
     major = getUInt16(tempUInt16);
@@ -118,10 +119,18 @@ void executeLine(char* line) {
     strncpy(tempUInt16, line + COMMAND_SIZE + (UINT16_SIZE * 3), UINT16_SIZE);
     mode = getUInt16(tempUInt16);
 
-    Serial.println(major);
-    Serial.println(minor);
-    Serial.println(patch);
-    Serial.println(mode);
+    if (major != 0 || minor != 1 || patch != 0) {
+      Serial.print("erorInvalid open plot version!");
+    } else if (mode != 0) {
+      Serial.print("erorInvalid mode!");
+    } else {
+      Serial.print("done");
+    }
+  }
+
+  if (strcmp(command, "home") == 0) {
+    goHome();
+    Serial.print("done");
   }
 }
 

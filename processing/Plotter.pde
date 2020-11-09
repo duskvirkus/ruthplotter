@@ -1,20 +1,20 @@
 import processing.serial.*;
 import java.lang.Exception;
 
-enum PLOTTER_MODE {
-  STREAM(0),
-  DEBUG(1);
+//enum PLOTTER_MODE {
+//  STREAM(0),
+//  DEBUG(1);
   
-  private int val;
+//  private int val;
   
-  private PLOTTER_MODE(int val) {
-    this.val = val;
-  }
+//  private PLOTTER_MODE(int val) {
+//    this.val = val;
+//  }
   
-  int get() {
-    return val;
-  }
-}
+//  int get() {
+//    return val;
+//  }
+//}
 
 //enum Command {
 //  START,
@@ -78,9 +78,9 @@ enum INFO_CODE {
   }
 }
 
-final int VERSION_MAJOR = 12;
-final int VERSION_MINOR = 34;
-final int VERSION_PATCH = 56;
+final int VERSION_MAJOR = 0;
+final int VERSION_MINOR = 1;
+final int VERSION_PATCH = 0;
 
 class Plotter {
   
@@ -101,7 +101,7 @@ class Plotter {
     sendUInt16(VERSION_MAJOR);
     sendUInt16(VERSION_MINOR);
     sendUInt16(VERSION_PATCH);
-    sendUInt16(PLOTTER_MODE.DEBUG);
+    sendUInt16(0);
   }
   
   void home() {
@@ -109,9 +109,9 @@ class Plotter {
     //sendCommand(Command.HOME);
   }
   
-  void changeMode(PLOTTER_MODE m) throws Exception {
-    sendUInt16(m);
-  }
+  //void changeMode(PLOTTER_MODE m) throws Exception {
+  //  sendUInt16(m);
+  //}
   
   void move(float x, float y) {
     move(new PVector(x, y));
@@ -133,22 +133,22 @@ class Plotter {
     sendPosition(v);
   }
   
-  PLOTTER_MODE getMode() throws Exception {
-    sendCommand(COMMAND.INFORMATION);
-    //sendCommand(Command.INFORMATION);
-    sendUInt16(INFO_CODE.MODE);
+  //PLOTTER_MODE getMode() throws Exception {
+  //  sendCommand(COMMAND.INFORMATION);
+  //  //sendCommand(Command.INFORMATION);
+  //  sendUInt16(INFO_CODE.MODE);
     
-    //reply = awaitReply();
-    return null;
-  }
+  //  //reply = awaitReply();
+  //  return null;
+  //}
   
-  PVector getPosition() throws Exception {
-    sendCommand(COMMAND.INFORMATION);
-    //sendCommand(Command.INFORMATION);
-    sendUInt16(INFO_CODE.POSITION);
+  //PVector getPosition() throws Exception {
+  //  sendCommand(COMMAND.INFORMATION);
+  //  //sendCommand(Command.INFORMATION);
+  //  sendUInt16(INFO_CODE.POSITION);
     
-    return null;
-  }
+  //  return null;
+  //}
   
   // -----
   
@@ -157,9 +157,9 @@ class Plotter {
     port.write(c.get());
   }
   
-  void sendUInt16(PLOTTER_MODE a) throws Exception {
-    sendUInt16(a.get());
-  }
+  //void sendUInt16(PLOTTER_MODE a) throws Exception {
+  //  sendUInt16(a.get());
+  //}
   
   void sendUInt16(INFO_CODE a) throws Exception {
     sendUInt16(a.get());
