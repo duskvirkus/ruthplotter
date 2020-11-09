@@ -1,176 +1,117 @@
 import processing.serial.*;
-import java.lang.Exception;
-
-//enum PLOTTER_MODE {
-//  STREAM(0),
-//  DEBUG(1);
-  
-//  private int val;
-  
-//  private PLOTTER_MODE(int val) {
-//    this.val = val;
-//  }
-  
-//  int get() {
-//    return val;
-//  }
-//}
-
-//enum Command {
-//  START,
-//  HOME,
-//  CHANGE_MODE,
-//  MOV,
-//  MARK,
-//  INFORMATION;
-//}
-
-//String commandToString(Command c) {
-//  switch (c) {
-//    case START:
-//      return "sta";
-//    case HOME:
-//      return "hom";
-//    case CHANGE_MODE:
-//      return "cmo";
-//    case MOV:
-//      return "mov";
-//    case MARK:
-//      return "mar";
-//    case INFORMATION:
-//      return "inf";
-//  }
-//  return null;
-//}
-
-enum COMMAND {
-  START("star"),
-  HOME("home"),
-  CHANGE_MODE("chmo"),
-  MOVE("move"),
-  MARK("mark"),
-  INFORMATION("info");
-  
-  private String command;
-  
-  private COMMAND(String command) {
-    this.command = command;
-  }
-  
-  String get() {
-    return command;
-  }
-}
-
-enum INFO_CODE {
-  GENERAL(0),
-  MODE(1),
-  POSITION(2);
-  
-  private int val;
-  
-  private INFO_CODE(int val) {
-    this.val = val;
-  }
-  
-  int get() {
-    return val;
-  }
-}
-
-final int VERSION_MAJOR = 0;
-final int VERSION_MINOR = 1;
-final int VERSION_PATCH = 0;
+import java.util.*;
 
 class Plotter {
   
   Serial port;
   
-  Plotter(PApplet app) throws Exception {
-    printArray(Serial.list());
+  boolean ready = true;  
+  Queue<ArrayList<Byte>> codeQueue = new ArrayDeque<ArrayList<Byte>>();
+  
+  Plotter(PApplet app) {
     port = new Serial(app, Serial.list()[0], 9600);
-    
-    delay(5000); // waiting for things to start up if not included then misses sta command
-    
-    begin();
+    delay(5000);
   }
   
-  void begin() throws Exception {
-    sendCommand(COMMAND.START);
-    //sendCommand(Command.START);
-    sendUInt16(VERSION_MAJOR);
-    sendUInt16(VERSION_MINOR);
-    sendUInt16(VERSION_PATCH);
-    sendUInt16(0);
+  void update() {
+    if (port.available() >= 4) {
+      ArrayList<Byte> reply = new ArrayList<Byte>();
+      
+      while(port.available() > 0) {
+        reply.add((byte) port.read());
+      }
+      
+      String s = "";
+      for (int i = 0; i < 4; i++) {
+        s += (char) reply.get(i).byteValue();
+      }
+      
+      if ("done".equals(s)) {
+        println("command compleate");
+        ready = true;
+      }//} else {
+        String err = "";
+        for (int i = 0; i < reply.size(); i++) {
+          err += (char) reply.get(i).byteValue();
+        }
+        //println(err);
+        //exit();
+      //}
+    }
+    
+    if (ready && codeQueue.size() > 0) {
+      send(codeQueue.poll());
+      ready = false;
+    }
+  }
+  
+  void start() {
+    ArrayList<Byte> line = new ArrayList<Byte>();
+    addCommand(line, "star");
+    addUInt16(line, 0); // major
+    addUInt16(line, 1); // minor
+    addUInt16(line, 0); // patch
+    addUInt16(line, 0); // mode
+    codeQueue.offer(line);
   }
   
   void home() {
-    sendCommand(COMMAND.HOME);
-    //sendCommand(Command.HOME);
-  }
-  
-  //void changeMode(PLOTTER_MODE m) throws Exception {
-  //  sendUInt16(m);
-  //}
-  
-  void move(float x, float y) {
-    move(new PVector(x, y));
+    ArrayList<Byte> line = new ArrayList<Byte>();
+    addCommand(line, "home");
+    addPadding(line, 8);
+    codeQueue.offer(line);
   }
   
   void move(PVector v) {
-    sendCommand(COMMAND.MOVE);
-    //sendCommand(Command.MOVE_CMD);
-    sendPosition(v);
+    move(v.x, v.y);
   }
   
-  void mark(float x, float y) {
-    mark(new PVector(x, y));
+  void move(float x, float y) {
+    ArrayList<Byte> line = new ArrayList<Byte>();
+    addCommand(line, "move");
+    addFloat32(line, x);
+    addFloat32(line, y);
+    codeQueue.offer(line);
   }
   
   void mark(PVector v) {
-    sendCommand(COMMAND.MARK);
-    //sendCommand(Command.MARK);
-    sendPosition(v);
+    mark(v.x, v.y);
   }
   
-  //PLOTTER_MODE getMode() throws Exception {
-  //  sendCommand(COMMAND.INFORMATION);
-  //  //sendCommand(Command.INFORMATION);
-  //  sendUInt16(INFO_CODE.MODE);
-    
-  //  //reply = awaitReply();
-  //  return null;
-  //}
-  
-  //PVector getPosition() throws Exception {
-  //  sendCommand(COMMAND.INFORMATION);
-  //  //sendCommand(Command.INFORMATION);
-  //  sendUInt16(INFO_CODE.POSITION);
-    
-  //  return null;
-  //}
-  
-  // -----
-  
-  void sendCommand(COMMAND c) {
-    // println(c);
-    port.write(c.get());
+  void mark(float x, float y) {
+    ArrayList<Byte> line = new ArrayList<Byte>();
+    addCommand(line, "mark");
+    addFloat32(line, x);
+    addFloat32(line, y);
+    codeQueue.offer(line);
   }
   
-  //void sendUInt16(PLOTTER_MODE a) throws Exception {
-  //  sendUInt16(a.get());
-  //}
-  
-  void sendUInt16(INFO_CODE a) throws Exception {
-    sendUInt16(a.get());
+  void send(ArrayList<Byte> codeLine) {
+    if (codeLine.size() != 12) {
+      println("Error! Wrong code line size in send");
+      exit();
+    }
+    for (int i = 0; i < codeLine.size(); ++i) {
+      port.write(codeLine.get(i));
+    }
   }
   
-  void sendUInt16(int a) throws Exception {
-    //println("sending" + a);
-    
-    // check bounds
+  void addCommand(ArrayList<Byte> line, String command) {
+    for (int i = 0; i < command.length(); ++i) {
+      line.add((byte) command.charAt(i));
+    }
+  }
+  
+  void addPadding(ArrayList<Byte> line, int amount) {
+    for (int i = 0; i < amount; ++i) {
+      line.add((byte) '\0');
+    }
+  }
+  
+  void addUInt16(ArrayList<Byte> line, int a) {
     if (a < 0 || a >= pow(2, 16)) {
-      throw new Exception("Invalid value in sendUInt16");
+      println("Error! Invalid value in addUInt16");
+      exit();
     }
     
     byte[] bytes = new byte[] {
@@ -179,18 +120,13 @@ class Plotter {
     };
     
     // little endian
-    
-    //System.out.println(Arrays.toString(bytes));
     for (int i = 0; i < bytes.length; ++i) {
-      port.write(bytes[i]);
+      line.add(bytes[i]);
     }
   }
   
-  void sendFloat32(float a) {
-    //println("sending" + a);
-    
+  void addFloat32(ArrayList<Byte> line, float a) {
     // convert to bytes and little endian
-    
     int intBits =  Float.floatToIntBits(a);
     byte[] bytes = new byte[] {
       (byte) ((intBits) & 0xff),
@@ -199,19 +135,9 @@ class Plotter {
       (byte) ((intBits >> 24) & 0xff),
     };
     
-    //System.out.println(Arrays.toString(bytes));
     for (int i = 0; i < bytes.length; ++i) {
-      port.write(bytes[i]);
+      line.add(bytes[i]);
     }
   }
-  
-  void sendPosition(PVector v) {
-    sendFloat32(v.x);
-    sendFloat32(v.y);
-  }
-  
-  //void awaitReply() {
-    
-  //}
   
 }
