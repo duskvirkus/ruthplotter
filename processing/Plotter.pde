@@ -16,13 +16,40 @@ enum PLOTTER_MODE {
   }
 }
 
+//enum Command {
+//  START,
+//  HOME,
+//  CHANGE_MODE,
+//  MOV,
+//  MARK,
+//  INFORMATION;
+//}
+
+//String commandToString(Command c) {
+//  switch (c) {
+//    case START:
+//      return "sta";
+//    case HOME:
+//      return "hom";
+//    case CHANGE_MODE:
+//      return "cmo";
+//    case MOV:
+//      return "mov";
+//    case MARK:
+//      return "mar";
+//    case INFORMATION:
+//      return "inf";
+//  }
+//  return null;
+//}
+
 enum COMMAND {
-  START("sta"),
-  HOME("hom"),
-  CHANGE_MODE("cmo"),
-  MOVE("mov"),
-  MARK("mar"),
-  INFORMATION("inf");
+  START("star"),
+  HOME("home"),
+  CHANGE_MODE("chmo"),
+  MOVE("move"),
+  MARK("mark"),
+  INFORMATION("info");
   
   private String command;
   
@@ -51,9 +78,9 @@ enum INFO_CODE {
   }
 }
 
-final int VERSION_MAJOR = 0;
-final int VERSION_MINOR = 0;
-final int VERSION_PATCH = 0;
+final int VERSION_MAJOR = 12;
+final int VERSION_MINOR = 34;
+final int VERSION_PATCH = 56;
 
 class Plotter {
   
@@ -62,6 +89,8 @@ class Plotter {
   Plotter(PApplet app) throws Exception {
     printArray(Serial.list());
     port = new Serial(app, Serial.list()[0], 9600);
+    
+    delay(5000); // waiting for things to start up if not included then misses sta command
     
     begin();
   }
@@ -124,7 +153,7 @@ class Plotter {
   // -----
   
   void sendCommand(COMMAND c) {
-    println(c);
+    // println(c);
     port.write(c.get());
   }
   

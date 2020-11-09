@@ -104,11 +104,11 @@ void setup() {
 }
 
 void draw() {
-  //while (port.available() > 0) {
-  //  int inByte = port.read();
-  //  char c = (char)inByte;
-  //  print(c);
-  //}
+  while (p.port.available() > 0) {
+    int inByte = p.port.read();
+    char c = (char)inByte;
+    print(c);
+  }
 }
 
 
