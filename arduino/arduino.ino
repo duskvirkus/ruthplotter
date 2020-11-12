@@ -103,7 +103,6 @@ void goHome() {
   currentA = -10;
   currentB = 0;
   locomoteTo(0, 0);
-//  step1->release();
 }
 
 void penUp() {
@@ -121,22 +120,10 @@ int getUInt16(char* bytes) {
 }
 
 float getFloat32(char* bytes) {
-//  for (int i = 0; i < 4; i++) {
-//    Serial.println((int) bytes[i]);
-//  }
   float ret = 0;
   memcpy(&ret, bytes, FLOAT32_SIZE);
   return ret;
 }
-
-//void convertToABCoords(float x, float y, int* a, int* b) {
-//  Serial.print("a thing=");
-//  Serial.println((y * sqrt(2)) + (((x - y) * sqrt(2) / 2)));
-//  Serial.print("b thing=");
-//  Serial.println((-((x - y) * sqrt(2) / 2)));
-//  *a = int(STEPS_PER_MM * (y * sqrt(2)) + ((x - y) * sqrt(2) / 2));
-//  *b = int(STEPS_PER_MM * ((x - y) * sqrt(2) / 2));
-//}
 
 int getA(float x, float y) {
   return int((y * sqrt(2)) + (getB(x, y)));
@@ -147,10 +134,6 @@ int getB(float x, float y) {
 }
 
 bool checkCoords(int a, int b) {
-//  Serial.print("a=");
-//  Serial.println(a);
-//  Serial.print("b=");
-//  Serial.println(b);
   if (a >= STEP_DIM_0 && a <= STEP_DIM_3 && b >= STEP_DIM_0 && b <= STEP_DIM_3) {
     if (b < a) {
       return true;
@@ -203,19 +186,15 @@ void executeLine(char* line) {
     
     int major, minor, patch, mode;
     
-//    strncpy(tempUInt16, line + COMMAND_SIZE, UINT16_SIZE);
     memcpy(tempUInt16, line + COMMAND_SIZE, UINT16_SIZE);
     major = getUInt16(tempUInt16);
 
-//    strncpy(tempUInt16, line + COMMAND_SIZE + UINT16_SIZE, UINT16_SIZE);
     memcpy(tempUInt16, line + COMMAND_SIZE + UINT16_SIZE, UINT16_SIZE);
     minor = getUInt16(tempUInt16);
 
-//    strncpy(tempUInt16, line + COMMAND_SIZE + (UINT16_SIZE * 2), UINT16_SIZE);
     memcpy(tempUInt16, line + COMMAND_SIZE + (UINT16_SIZE * 2), UINT16_SIZE);
     patch = getUInt16(tempUInt16);
 
-//    strncpy(tempUInt16, line + COMMAND_SIZE + (UINT16_SIZE * 3), UINT16_SIZE);
     memcpy(tempUInt16, line + COMMAND_SIZE + (UINT16_SIZE * 3), UINT16_SIZE);
     mode = getUInt16(tempUInt16);
 
@@ -236,14 +215,11 @@ void executeLine(char* line) {
 
   int movecmp = strcmp(command, "move");
   if (movecmp == 0 || strcmp(command, "mark") == 0) {
-//    Serial.println(line);
     float x, y;
     
-//    strncpy(tempFloat32, line + COMMAND_SIZE, FLOAT32_SIZE);
     memcpy(tempFloat32, line + COMMAND_SIZE, FLOAT32_SIZE);
     x = getFloat32(tempFloat32);
 
-//    strncpy(tempFloat32, line + COMMAND_SIZE + FLOAT32_SIZE, FLOAT32_SIZE);
     memcpy(tempFloat32, line + COMMAND_SIZE + FLOAT32_SIZE, FLOAT32_SIZE);
     y = getFloat32(tempFloat32);
 
@@ -252,9 +228,6 @@ void executeLine(char* line) {
     } else {
       penDown();
     }
-    
-//    Serial.println(x);
-//    Serial.println(y);
     
     bool worked = locomote(x, y);
 
@@ -271,10 +244,7 @@ void readSerial() {
     char line[LINE_SIZE];
     for (int i = 0; i < LINE_SIZE; ++i) {
       line[i] = Serial.read();
-//      Serial.println((int) line[i]);
-//      Serial.println(line[i]);
     }
-//    Serial.println(line);
     executeLine(line);
   }
 }
