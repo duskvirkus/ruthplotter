@@ -12,6 +12,6 @@ Ruth Plotter uses the open plot standard that I developed. More information on i
 - [How to make Arduino mini CNC plotter machine](https://electricdiylab.com/how-to-make-arduino-mini-cnc-plotter-machine/) by sandeep
 - [Marlin GCode Reference](https://marlinfw.org/meta/gcode/)
 - [Reddit GCode Dialects](https://www.reddit.com/r/CNC/comments/b9xsal/many_dialects_of_gcode/)
-- [](https://erik-engheim.medium.com/g-code-crash-course-for-working-with-plotters-dadde0cc23cf)
-- [](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm)
-- [](https://www.youtube.com/watch?v=RGB-wlatStc)
+- [G-Code Crash Course for Working with Plotters](https://erik-engheim.medium.com/g-code-crash-course-for-working-with-plotters-dadde0cc23cf) by Erik Engheim
+- [Bresenham's line algorithm (Wikipedia)](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm)
+- [Bresenham's Line Drawing Algorithm Video](https://www.youtube.com/watch?v=RGB-wlatStc) by Abdul Bari
