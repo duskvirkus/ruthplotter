@@ -34,12 +34,17 @@ class Plotter {
         for (int i = 0; i < reply.size(); i++) {
           err += (char) reply.get(i).byteValue();
         }
-        //println(err);
+        println(err);
         //exit();
       //}
     }
     
     if (ready && codeQueue.size() > 0) {
+      //codeQueue.poll();
+      //codeQueue.poll();
+      println("sending" + codeQueue.peek());
+      
+      
       send(codeQueue.poll());
       ready = false;
     }
@@ -84,6 +89,14 @@ class Plotter {
     addFloat32(line, x);
     addFloat32(line, y);
     codeQueue.offer(line);
+  }
+  
+  int width() {
+    return 2870;
+  }
+  
+  int height() {
+    return 2030;
   }
   
   void send(ArrayList<Byte> codeLine) {

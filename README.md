@@ -13,3 +13,5 @@ Ruth Plotter uses the open plot standard that I developed. More information on i
 - [Marlin GCode Reference](https://marlinfw.org/meta/gcode/)
 - [Reddit GCode Dialects](https://www.reddit.com/r/CNC/comments/b9xsal/many_dialects_of_gcode/)
 - [](https://erik-engheim.medium.com/g-code-crash-course-for-working-with-plotters-dadde0cc23cf)
+- [](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm)
+- [](https://www.youtube.com/watch?v=RGB-wlatStc)
