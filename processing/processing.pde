@@ -12,17 +12,19 @@ void setup() {
   int w = p.width();
   int h = p.height();
   
-  int r = 200;
-  for (int i = 0; i < 21; i++) {
-    float a = map(i, 0, 20, 0, TWO_PI);
-    float x = int(r * cos(a) + w / 2);
-    float y = int(r * sin(a) + h / 2);
-    
-    if (i == 0) {
-      p.move(x, y);
-      println(x, y);
-    } else {
-      p.mark(x, y);
+  for (int j = 0; j < 5; ++j) {
+    int r = int(map(j, 0, 5, 50, 300));
+    for (int i = 0; i < 201; i++) {
+      float a = map(i, 0, 200, TWO_PI, 0);
+      float x = int(((r * cos(a)))+ w / 2);
+      float y = int(r * sin(a) + h / 2);
+      
+      if (i == 0) {
+        p.move(x, y);
+        println(x, y);
+      } else {
+        p.mark(x, y);
+      }
     }
   }
   
@@ -32,7 +34,20 @@ void setup() {
   //p.mark(20, 70);
   //p.mark(20, 20);
   
+  //for (int i = 0; i < 5; i++) {
+  //  int s = int(map(i, 0, 5, 50, 400));
+  //  rectangle(300 - s / 2, 300 - s / 2, s, s);
+  //}
+  
   p.home();
+}
+
+void rectangle(int x, int y, int w, int h) {
+  p.move(x, y);
+  p.mark(x + w, y);
+  p.mark(x + w, y + h);
+  p.mark(x, y + h);
+  p.mark(x, y);
 }
 
 void draw() {

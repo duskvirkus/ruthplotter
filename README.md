@@ -15,3 +15,5 @@ Ruth Plotter uses the open plot standard that I developed. More information on i
 - [G-Code Crash Course for Working with Plotters](https://erik-engheim.medium.com/g-code-crash-course-for-working-with-plotters-dadde0cc23cf) by Erik Engheim
 - [Bresenham's line algorithm (Wikipedia)](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm)
 - [Bresenham's Line Drawing Algorithm Video](https://www.youtube.com/watch?v=RGB-wlatStc) by Abdul Bari
+- [CODE GENIUS - Drawing Lines with Bresenham's Line Algorithm by Jenn Schiffer]https://www.youtube.com/watch?v=zytBpLlSHms
+- [https://www.youtube.com/watch?v=vlZFSzCIwoc](Bresenham Algorithmus: Informatik (deutsch, english cc)) by Bleeptrack
