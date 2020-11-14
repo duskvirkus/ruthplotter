@@ -42,34 +42,33 @@ float lerp(float start, float stop, float amt) {
 }
 
 void upLeftStep() {
-  step1->onestep(FORWARD, SINGLE);
+  step1->onestep(FORWARD, MICROSTEP);
   delay(5);
 }
 
 void downLeftStep() {
-  step2->onestep(FORWARD, SINGLE);
+  step2->onestep(FORWARD, MICROSTEP);
   delay(5);
 }
 
 void upRightStep() {
-  step2->onestep(BACKWARD, SINGLE);
+  step2->onestep(BACKWARD, MICROSTEP);
   delay(5);
 }
 
 void downRightStep() {
-  step1->onestep(BACKWARD, SINGLE);
+  step1->onestep(BACKWARD, MICROSTEP);
   delay(5);
 }
 
 void locomoteTo(int a, int b) {
-  float d = dist(currentA, currentB, a, b) * 2;
+  float d = dist(currentA, currentB, a, b);
 
   int inProgressA = currentA;
   int inProgressB = currentB;
 
   for (int i = 0; i < d; ++i) {
-    float amt = (i + 1) / d;
-//    float amt = i / d;
+    float amt = i / d;
 
     int nextA = int(lerp(currentA, a, amt));
     int nextB = int(lerp(currentB, b, amt));
@@ -128,12 +127,20 @@ float getFloat32(char* bytes) {
   return ret;
 }
 
+//int getA(float x, float y) {
+//  return int((y * sqrt(2)) + (getB(x, y)));
+//}
+//
+//int getB(float x, float y) {
+//  return int(((x - y) * sqrt(2) / 2));
+//}
+
 int getA(float x, float y) {
-  return int((y * sqrt(2)) + (getB(x, y)));
+  return x;
 }
 
 int getB(float x, float y) {
-  return int(((x - y) * sqrt(2) / 2));
+  return y;
 }
 
 bool checkCoords(int a, int b) {

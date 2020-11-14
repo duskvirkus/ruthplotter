@@ -61,6 +61,28 @@ void downRightStep() {
   delay(5);
 }
 
+void plotLine(int x0, int y0, int x1, int y1) {
+  int dx =  abs(x1 - x0);
+  int sx = x0 < x1 ? 1 : -1;
+  int dy = -abs(y1 - y0);
+  int sy = y0 < y1 ? 1 : -1;
+  int err = dx + dy;  /* error value e_xy */
+  while (true) {  /* loop */
+    if (x0 == x1 && y0 == y1) {
+      break;
+    }
+    int e2 = 2*err;
+    if (e2 >= dy) { /* e_xy+e_x > 0 */
+      err += dy;
+      x0 += sx;
+    }
+    if (e2 <= dx) { /* e_xy+e_y < 0 */
+      err += dx;
+      y0 += sy;
+    }
+  }
+}
+
 void locomoteTo(int a, int b) {
   float d = dist(currentA, currentB, a, b) * 2;
 
@@ -68,8 +90,7 @@ void locomoteTo(int a, int b) {
   int inProgressB = currentB;
 
   for (int i = 0; i < d; ++i) {
-    float amt = (i + 1) / d;
-//    float amt = i / d;
+    float amt = i / d;
 
     int nextA = int(lerp(currentA, a, amt));
     int nextB = int(lerp(currentB, b, amt));

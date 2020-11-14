@@ -62,14 +62,13 @@ void downRightStep() {
 }
 
 void locomoteTo(int a, int b) {
-  float d = dist(currentA, currentB, a, b) * 2;
+  float d = dist(currentA, currentB, a, b);
 
   int inProgressA = currentA;
   int inProgressB = currentB;
 
   for (int i = 0; i < d; ++i) {
-    float amt = (i + 1) / d;
-//    float amt = i / d;
+    float amt = i / d;
 
     int nextA = int(lerp(currentA, a, amt));
     int nextB = int(lerp(currentB, b, amt));
@@ -128,12 +127,20 @@ float getFloat32(char* bytes) {
   return ret;
 }
 
+//int getA(float x, float y) {
+//  return int((y * sqrt(2)) + (getB(x, y)));
+//}
+//
+//int getB(float x, float y) {
+//  return int(((x - y) * sqrt(2) / 2));
+//}
+
 int getA(float x, float y) {
-  return int((y * sqrt(2)) + (getB(x, y)));
+  return x;
 }
 
 int getB(float x, float y) {
-  return int(((x - y) * sqrt(2) / 2));
+  return y;
 }
 
 bool checkCoords(int a, int b) {
