@@ -61,40 +61,122 @@ void downRightStep() {
   delay(5);
 }
 
-void locomoteTo(int a, int b) {
-  float d = dist(currentA, currentB, a, b) * 2;
+void stepIncreaseA() {
+   downRightStep();
+  currentA++;
+}
 
-  int inProgressA = currentA;
-  int inProgressB = currentB;
+void stepDecreaseA() {
+   upLeftStep();
+  currentA--;
+}
 
-  for (int i = 0; i < d; ++i) {
-    float amt = (i + 1) / d;
-//    float amt = i / d;
+void stepIncreaseB() {
+   upRightStep();
+  currentB++;
+}
 
-    int nextA = int(lerp(currentA, a, amt));
-    int nextB = int(lerp(currentB, b, amt));
+void stepDecreaseB() {
+   downLeftStep();
+  currentB--;
+}
 
-    int diffA = nextA - inProgressA;
-    if (diffA <= -1) {
-      upLeftStep();
+int locomoteTo(int a, int b) {
+
+  int deltaA = a - currentA;
+  int deltaB = b - currentB;
+
+// same position and straight line cases
+  if (deltaA == 0 && deltaB == 0) {
+    return 0;
+  } else if (deltaA == 0) {
+    for (int i = 0; i < abs(deltaB); ++i) {
+      if (deltaB > 0) {
+        stepIncreaseB();
+      } else {
+        stepDecreaseB();
+      }
     }
-    if (diffA >= 1) {
-      downRightStep();
+    return 0;
+  } else if (deltaB == 0) {
+    for (int i = 0; i < abs(deltaA); ++i) {
+      if (deltaA > 0) {
+        stepIncreaseA();
+      } else {
+        stepDecreaseA();
+      }
     }
-
-    int diffB = nextB - inProgressB;
-    if (diffB <= -1) {
-      downLeftStep();
-    }
-    if (diffB >= 1) {
-      upRightStep();
-    }
-
-    inProgressA = nextA;
-    inProgressB = nextB;
+    return 0;
   }
-  currentA = a;
-  currentB = b;
+
+  float slope = deltaB / (float) deltaA;
+
+  printf("slope=%.4f\n", slope);
+
+  if (fabsf(slope) <= 1) {
+    printf("case a\n");
+    float bError = 0;
+//    int inProgressB = currentB;
+
+    for (int i = 0; i < abs(deltaA); ++i) {
+      float nextB;
+
+      if (deltaA > 0) {
+        stepIncreaseA();
+        nextB = currentB + slope + bError;
+      } else {
+        stepDecreaseA();
+        nextB = currentB - slope + bError;
+      }
+
+
+      int useB = roundf(nextB);
+      bError = nextB - useB;
+
+      int diffB = useB - currentB;
+//      int diffB = currentB - useB;
+      if (diffB > 1 || diffB < -1) {
+        return 1;
+      } else if (diffB == 1) {
+        stepIncreaseB();
+      } else if (diffB == -1) {
+        stepDecreaseB();
+      }
+    }
+  } else {
+    printf("case b\n");
+    slope = 1.0f / slope;
+
+    float aError = 0;
+
+    for (int i = 0; i < abs(deltaB); ++i) {
+      float nextA;
+
+      if (deltaB > 0) {
+        stepIncreaseB();
+        nextA = currentA + slope + aError;
+      } else {
+        stepDecreaseB();
+        nextA = currentA - slope + aError;
+      }
+
+
+      int useA = roundf(nextA);
+      aError = nextA - useA;
+
+      int diffA = useA - currentA;
+//      int diffA = currentA - useA;
+      if (diffA > 1 || diffA < -1) {
+        return 1;
+      } else if (diffA == 1) {
+        stepIncreaseA();
+      } else if (diffA == -1) {
+        stepDecreaseA();
+      }
+    }
+  }
+
+  return 0;
 }
 
 void goHome() {
@@ -110,6 +192,7 @@ void goHome() {
 
 void penUp() {
   penServo.write(PEN_UP);
+//  delay(20);
 }
 
 void penDown() {
