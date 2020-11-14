@@ -14,8 +14,8 @@ void setup() {
   
   for (int j = 0; j < 5; ++j) {
     int r = int(map(j, 0, 5, 50, 300));
-    for (int i = 0; i < 21; i++) {
-      float a = map(i, 0, 20, TWO_PI, 0);
+    for (int i = 0; i < 201; i++) {
+      float a = map(i, 0, 200, TWO_PI, 0);
       float x = int(((r * cos(a)))+ w / 2);
       float y = int(r * sin(a) + h / 2);
       

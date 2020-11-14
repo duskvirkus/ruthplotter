@@ -61,22 +61,30 @@ int improvedLocomoteTo(int a, int b) {
 
   float slope = deltaB / (float) deltaA;
 
-  if (abs(slope) <= 1) {
+  printf("slope=%.4f\n", slope);
+
+  if (fabsf(slope) <= 1) {
+    printf("case a\n");
     float bError = 0;
-    int inProgressB = currentB;
+//    int inProgressB = currentB;
 
     for (int i = 0; i < abs(deltaA); ++i) {
+      float nextB;
+
       if (deltaA > 0) {
         stepIncreaseA();
+        nextB = currentB + slope + bError;
       } else {
         stepDecreaseA();
+        nextB = currentB - slope + bError;
       }
 
-      float nextB = inProgressB + slope + bError;
+
       int useB = roundf(nextB);
       bError = nextB - useB;
 
-      int diffB = useB - inProgressB;
+      int diffB = useB - currentB;
+//      int diffB = currentB - useB;
       if (diffB > 1 || diffB < -1) {
         return 1;
       } else if (diffB == 1) {
@@ -84,26 +92,30 @@ int improvedLocomoteTo(int a, int b) {
       } else if (diffB == -1) {
         stepDecreaseB();
       }
-      inProgressB = useB;
     }
   } else {
-    slope = 1 / slope;
+    printf("case b\n");
+    slope = 1.0f / slope;
 
     float aError = 0;
-    int inProgressA = currentA;
 
     for (int i = 0; i < abs(deltaB); ++i) {
+      float nextA;
+
       if (deltaB > 0) {
         stepIncreaseB();
+        nextA = currentA + slope + aError;
       } else {
         stepDecreaseB();
+        nextA = currentA - slope + aError;
       }
 
-      float nextA = inProgressA + slope + aError;
+
       int useA = roundf(nextA);
       aError = nextA - useA;
 
-      int diffA = useA - inProgressA;
+      int diffA = useA - currentA;
+//      int diffA = currentA - useA;
       if (diffA > 1 || diffA < -1) {
         return 1;
       } else if (diffA == 1) {
@@ -111,7 +123,6 @@ int improvedLocomoteTo(int a, int b) {
       } else if (diffA == -1) {
         stepDecreaseA();
       }
-      inProgressA = useA;
     }
   }
 
@@ -130,22 +141,26 @@ void setTest(int a, int b) {
 }
 
 void check(int i, int ret) {
-//  if (currentA != testA || currentB != testB) {
+  if (currentA != testA || currentB != testB || ret != 0) {
     printf("check=%d returnval=%d\n", i, ret);
     printf("  last    a=%d b=%d\n", lastA, lastB);
     printf("  test    a=%d b=%d\n", testA, testB);
     printf("  current a=%d b=%d\n", currentA, currentB);
-//  }
+  }
 }
 
 int main() {
 
   int ret = 0;
 
-  currentA = 100;
-  currentB = 100;
+  currentA = 2928;
+  currentB = -682;
 
-  setTest(100, 100);
+//  setTest(100, 100);
+//  ret = improvedLocomoteTo(testA, testB);
+//  check(-1, ret);
+
+  setTest(-489, -357);
   ret = improvedLocomoteTo(testA, testB);
   check(-1, ret);
 
@@ -157,7 +172,7 @@ int main() {
   ret = improvedLocomoteTo(testA, testB);
   check(-3, ret);
 
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < 100; ++i) {
     setTest((int) (rand() % 5000) - 1500, (int) (rand() % 5000) - 1500);
     ret = improvedLocomoteTo(testA, testB);
     check(i, ret);
