@@ -1,6 +1,6 @@
-#include <Wire.h>
-#include <Servo.h>
 #include <Adafruit_MotorShield.h>
+#include <Servo.h>
+#include <Wire.h>
 
 #define LIMIT_1 7
 #define LIMIT_2 6
@@ -34,11 +34,11 @@ int currentB;
 Servo penServo;
 
 float dist(float x1, float y1, float x2, float y2) {
-  return sqrt(sq(x2-x1) + sq(y2-y1));
+  return sqrt(sq(x2 - x1) + sq(y2 - y1));
 }
 
 float lerp(float start, float stop, float amt) {
-  return start + (stop-start) * amt;
+  return start + (stop - start) * amt;
 }
 
 void upLeftStep() {
@@ -62,22 +62,22 @@ void downRightStep() {
 }
 
 void stepIncreaseA() {
-   downRightStep();
+  downRightStep();
   currentA++;
 }
 
 void stepDecreaseA() {
-   upLeftStep();
+  upLeftStep();
   currentA--;
 }
 
 void stepIncreaseB() {
-   upRightStep();
+  upRightStep();
   currentB++;
 }
 
 void stepDecreaseB() {
-   downLeftStep();
+  downLeftStep();
   currentB--;
 }
 
@@ -86,7 +86,7 @@ int locomoteTo(int a, int b) {
   int deltaA = a - currentA;
   int deltaB = b - currentB;
 
-// same position and straight line cases
+  // same position and straight line cases
   if (deltaA == 0 && deltaB == 0) {
     return 0;
   } else if (deltaA == 0) {
@@ -109,14 +109,14 @@ int locomoteTo(int a, int b) {
     return 0;
   }
 
-  float slope = deltaB / (float) deltaA;
+  float slope = deltaB / (float)deltaA;
 
   printf("slope=%.4f\n", slope);
 
   if (fabsf(slope) <= 1) {
     printf("case a\n");
     float bError = 0;
-//    int inProgressB = currentB;
+    //    int inProgressB = currentB;
 
     for (int i = 0; i < abs(deltaA); ++i) {
       float nextB;
@@ -129,12 +129,11 @@ int locomoteTo(int a, int b) {
         nextB = currentB - slope + bError;
       }
 
-
       int useB = roundf(nextB);
       bError = nextB - useB;
 
       int diffB = useB - currentB;
-//      int diffB = currentB - useB;
+      //      int diffB = currentB - useB;
       if (diffB > 1 || diffB < -1) {
         return 1;
       } else if (diffB == 1) {
@@ -160,12 +159,11 @@ int locomoteTo(int a, int b) {
         nextA = currentA - slope + aError;
       }
 
-
       int useA = roundf(nextA);
       aError = nextA - useA;
 
       int diffA = useA - currentA;
-//      int diffA = currentA - useA;
+      //      int diffA = currentA - useA;
       if (diffA > 1 || diffA < -1) {
         return 1;
       } else if (diffA == 1) {
@@ -192,53 +190,51 @@ void goHome() {
 
 void penUp() {
   penServo.write(PEN_UP);
-//  delay(20);
+  //  delay(20);
 }
 
-void penDown() {
-  penServo.write(PEN_DOWN);
-}
+void penDown() { penServo.write(PEN_DOWN); }
 
-int getUInt16(char* bytes) {
+int getUInt16(char *bytes) {
   int ret = 0;
   memcpy(&ret, bytes, UINT16_SIZE);
   return ret;
 }
 
-float getFloat32(char* bytes) {
+float getFloat32(char *bytes) {
   float ret = 0;
   memcpy(&ret, bytes, FLOAT32_SIZE);
   return ret;
 }
 
-int getA(float x, float y) {
-  return int((y * sqrt(2)) + (getB(x, y)));
-}
+int getA(float x, float y) { return int((y * sqrt(2)) + (getB(x, y))); }
 
-int getB(float x, float y) {
-  return int(((x - y) * sqrt(2) / 2));
-}
+int getB(float x, float y) { return int(((x - y) * sqrt(2) / 2)); }
 
 bool checkCoords(int a, int b) {
-  if (a >= STEP_DIM_0 && a <= STEP_DIM_3 && b >= STEP_DIM_0 && b <= STEP_DIM_3) {
+  if (a >= STEP_DIM_0 && a <= STEP_DIM_3 && b >= STEP_DIM_0 &&
+      b <= STEP_DIM_3) {
     if (b < a) {
       return true;
     }
   }
-  
-  if (a >= STEP_DIM_3 && a <= STEP_DIM_4 && b >= STEP_DIM_2 && b <= STEP_DIM_3) {
+
+  if (a >= STEP_DIM_3 && a <= STEP_DIM_4 && b >= STEP_DIM_2 &&
+      b <= STEP_DIM_3) {
     if (b - STEP_DIM_2 < STEP_DIM_1 - (a - STEP_DIM_3)) {
       return true;
     }
   }
-  
-  if (a >= STEP_DIM_0 && a <= STEP_DIM_1 && b >= -STEP_DIM_1 && b <= STEP_DIM_0) {
+
+  if (a >= STEP_DIM_0 && a <= STEP_DIM_1 && b >= -STEP_DIM_1 &&
+      b <= STEP_DIM_0) {
     if (b + STEP_DIM_1 > STEP_DIM_1 - a) {
       return true;
     }
   }
-  
-  if (a >= STEP_DIM_1 && a <= STEP_DIM_4 && b >= -STEP_DIM_1 && b <= STEP_DIM_2) {
+
+  if (a >= STEP_DIM_1 && a <= STEP_DIM_4 && b >= -STEP_DIM_1 &&
+      b <= STEP_DIM_2) {
     if (b + STEP_DIM_1 > a - STEP_DIM_1) {
       return true;
     }
@@ -259,9 +255,9 @@ bool locomote(float x, float y) {
   return valid;
 }
 
-void executeLine(char* line) {
+void executeLine(char *line) {
   char command[COMMAND_SIZE + 1];
-//  strncpy(command, line, COMMAND_SIZE);
+  //  strncpy(command, line, COMMAND_SIZE);
   memcpy(command, line, COMMAND_SIZE);
   command[COMMAND_SIZE] = '\0';
 
@@ -269,9 +265,9 @@ void executeLine(char* line) {
   char tempFloat32[FLOAT32_SIZE];
 
   if (strcmp(command, "star") == 0) {
-    
+
     int major, minor, patch, mode;
-    
+
     memcpy(tempUInt16, line + COMMAND_SIZE, UINT16_SIZE);
     major = getUInt16(tempUInt16);
 
@@ -302,7 +298,7 @@ void executeLine(char* line) {
   int movecmp = strcmp(command, "move");
   if (movecmp == 0 || strcmp(command, "mark") == 0) {
     float x, y;
-    
+
     memcpy(tempFloat32, line + COMMAND_SIZE, FLOAT32_SIZE);
     x = getFloat32(tempFloat32);
 
@@ -314,7 +310,7 @@ void executeLine(char* line) {
     } else {
       penDown();
     }
-    
+
     bool worked = locomote(x, y);
 
     if (worked) {
@@ -337,7 +333,7 @@ void readSerial() {
 
 void setup() {
   Serial.begin(9600);
-  
+
   pinMode(LIMIT_1, INPUT);
   pinMode(LIMIT_2, INPUT);
 

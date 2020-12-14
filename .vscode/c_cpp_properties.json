@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/violet/Arduino/libraries/Adafruit_Motor_Shield_V2_Library/**",
+                "~/Arduino/libraries/**",
+                "${config:arduino.path}tools/**",
+                "${config:arduino.path}libraries/**",
+                "${config:arduino.path}hardware/tools/**",
+                "${config:arduino.path}hardware/arduino/avr/**",
+                "${config:openFrameworks.path}/libs/**",
+                "${config:openFrameworks.path}/addons/**",
+                "${workspaceFolder}/**",
+                "/usr/include/**",
+                "/usr/lib/**",
+                "/usr/lib64/**",
+                "/home/violet/arduino-1.8.13/hardware/arduino/avr/**",
+                "/home/violet/arduino-1.8.13/hardware/tools/**",
+                "/home/violet/arduino-1.8.13/libraries/**",
+                "/home/violet/Arduino/libraries/**",
+                "/home/violet/arduino-1.8.13/tools/**"
+            ],
+            "forcedInclude": [
+                "/home/violet/arduino-1.8.13/hardware/arduino/avr/cores/arduino/Arduino.h"
+            ],
+            "defines": [
+                "USBCON"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
+}
