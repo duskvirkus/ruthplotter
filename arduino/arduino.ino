@@ -33,8 +33,6 @@ int currentB;
 
 Servo penServo;
 
-bool started = false;
-
 float dist(float x1, float y1, float x2, float y2) {
   return sqrt(sq(x2 - x1) + sq(y2 - y1));
 }
@@ -267,7 +265,6 @@ void executeLine(char *line) {
   char tempFloat32[FLOAT32_SIZE];
 
   if (strcmp(command, "star") == 0) {
-
     int major, minor, patch, mode;
 
     memcpy(tempUInt16, line + COMMAND_SIZE, UINT16_SIZE);
@@ -289,7 +286,6 @@ void executeLine(char *line) {
       Serial.print("erorInvalid mode!");
     } else {
       Serial.print("done");
-      started = true;
     }
   }
 
@@ -347,17 +343,6 @@ void setup() {
 
   currentA = 0;
   currentB = 0;
-
-  delay(1000);
-
-  Serial.print("done");
 }
 
-void loop() {
-  delay(200);
-  readSerial();
-
-  if (!started) {
-    Serial.print("done");
-  }
-}
+void loop() { readSerial(); }
