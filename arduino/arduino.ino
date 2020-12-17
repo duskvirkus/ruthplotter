@@ -33,6 +33,8 @@ int currentB;
 
 Servo penServo;
 
+bool started = false;
+
 float dist(float x1, float y1, float x2, float y2) {
   return sqrt(sq(x2 - x1) + sq(y2 - y1));
 }
@@ -280,12 +282,14 @@ void executeLine(char *line) {
     memcpy(tempUInt16, line + COMMAND_SIZE + (UINT16_SIZE * 3), UINT16_SIZE);
     mode = getUInt16(tempUInt16);
 
-    if (major != 0 || minor != 1 || patch != 0) {
+    // Serial.println("Working!");
+    if (major != 0 || minor != 1 || patch != 1) {
       Serial.print("erorInvalid open plot version!");
     } else if (mode != 0) {
       Serial.print("erorInvalid mode!");
     } else {
       Serial.print("done");
+      started = true;
     }
   }
 
@@ -343,9 +347,17 @@ void setup() {
 
   currentA = 0;
   currentB = 0;
+
+  delay(1000);
+
+  Serial.print("done");
 }
 
 void loop() {
   delay(200);
   readSerial();
+
+  if (!started) {
+    Serial.print("done");
+  }
 }

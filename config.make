@@ -6,7 +6,7 @@
 ################################################################################
 # OF ROOT
 #   The location of your root openFrameworks installation
-#       (default) OF_ROOT = ../../.. 
+#       (default) OF_ROOT = ../../of 
 ################################################################################
 OF_ROOT = /home/violet/of
 
@@ -37,7 +37,7 @@ PROJECT_ROOT = ./openFrameworks
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_EXTERNAL_SOURCE_PATHS = 
+PROJECT_EXTERNAL_SOURCE_PATHS = /home/violet/of/addons/ofxOPlot
 
 ################################################################################
 # PROJECT EXCLUSIONS

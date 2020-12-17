@@ -1,18 +1,15 @@
 #pragma once
 
 #include "ofMain.h"
-
+#include "ofxOPlot.h"
 class ofApp : public ofBaseApp {
 
 public:
-  bool ledOn;
-  ofSerial serial;
+  ofxOPlot::Machine plotter;
 
   void setup();
   void update();
   void draw();
-
-  void mousePressed(int, int, int);
 
   void title();
 };

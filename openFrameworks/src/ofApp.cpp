@@ -4,24 +4,21 @@ constexpr const char *PROJECT_NAME = "Untitled";
 constexpr const char *CREATOR = "Violet Graham";
 
 void ofApp::setup() {
-  serial.listDevices();
-  serial.setup(0, 9600);
+  plotter.setup();
+  ofxOPlot::Program program;
+
+  program.addDirective(ofxOPlot::makeStartDirective());
+  program.addDirective(ofxOPlot::makeHomeDirective());
+
+  plotter.loadProgram(program);
 }
 
-void ofApp::update() { title(); }
-
-void ofApp::draw() {
-  ofBackground(ledOn ? 255 : 0);
-  ofSetColor(ledOn ? 0 : 255);
-  ofDrawBitmapString(
-      "click mouse to toggle ardunio's on board led labeled with an L", 100,
-      ofGetHeight() / 2);
+void ofApp::update() {
+  title();
+  plotter.update();
 }
 
-void ofApp::mousePressed(int x, int y, int button) {
-  ledOn = !ledOn;
-  serial.writeByte(ledOn ? 'A' : 'B');
-}
+void ofApp::draw() {}
 
 void ofApp::title() {
   stringstream titleStream;

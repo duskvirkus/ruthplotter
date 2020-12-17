@@ -1,0 +1,15 @@
+#pragma once
+
+#include <limits>
+
+#define OPLOT_LINE_SIZE 12
+char static_assert_float32[1 - (2 * ((sizeof(float) * CHAR_BIT) != 32))];
+
+namespace oplot {
+enum COMMAND {
+  start = 0,
+  home,
+  move,
+  mark,
+};
+} // namespace oplot
