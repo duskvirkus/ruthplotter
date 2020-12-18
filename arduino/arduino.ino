@@ -257,7 +257,6 @@ bool locomote(float x, float y) {
 
 void executeLine(char *line) {
   char command[COMMAND_SIZE + 1];
-  //  strncpy(command, line, COMMAND_SIZE);
   memcpy(command, line, COMMAND_SIZE);
   command[COMMAND_SIZE] = '\0';
 
@@ -297,6 +296,7 @@ void executeLine(char *line) {
 
   int movecmp = strcmp(command, "move");
   if (movecmp == 0 || strcmp(command, "mark") == 0) {
+    Serial.println("hello");
     float x, y;
 
     memcpy(tempFloat32, line + COMMAND_SIZE, FLOAT32_SIZE);
@@ -304,6 +304,11 @@ void executeLine(char *line) {
 
     memcpy(tempFloat32, line + COMMAND_SIZE + FLOAT32_SIZE, FLOAT32_SIZE);
     y = getFloat32(tempFloat32);
+
+    Serial.print("x: ");
+    Serial.println(x);
+    Serial.print("y: ");
+    Serial.println(y);
 
     if (movecmp == 0) {
       penUp();
